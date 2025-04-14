@@ -31,6 +31,8 @@ The system consists of two main components:
    - DHT11: Data pin connected to GPIO pin specified in sketch.ino
    - MQ135: Analog output connected to analog pin specified in sketch.ino
    - GP2Y1010AU0F: Follow the connection diagram with the 150Ω resistor and 220μF capacitor
+2. Refer to `ConnectionsGuide.png` in the project directory for all component connections.
+3. Double-check all connections before powering the system to avoid damage to sensors or microcontroller
 
 ### ESP32 Firmware Installation
 1. Open the `sketch.ino` file in the Arduino IDE
@@ -93,12 +95,6 @@ The system correlates air quality with:
 - Temperature and humidity conditions
 - Time of day patterns
 - Historical trends
-
-## Troubleshooting
-- If no data appears on the dashboard, check that the ESP32 is properly connected and sending data
-- Verify that the correct serial port is configured in the Flask application
-- Check the console for any error messages from the Flask application
-- If you encounter dependency issues, ensure you're using the correct Python version and that all requirements are installed
 
 ## Future Improvements
 - Calibration of MQ135 and dust sensors for more accurate readings
