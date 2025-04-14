@@ -19,7 +19,7 @@
 | 150 Ohm Resistor | One end | White Wire (LED ANODE) |
 | 150 Ohm Resistor | Other end | VIN |
 
-## Wiring Diagram Notes
+## Note:
 
 1. The GP2Y1010AU0F dust sensor requires a 150Ω resistor between the LED ANODE pin and VIN
 2. The 220μF capacitor is connected between the Analog Output and GND
