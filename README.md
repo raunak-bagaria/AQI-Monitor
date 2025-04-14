@@ -31,7 +31,7 @@ The system consists of two main components:
    - DHT11: Data pin connected to GPIO pin specified in sketch.ino
    - MQ135: Analog output connected to analog pin specified in sketch.ino
    - GP2Y1010AU0F: Follow the connection diagram with the 150Ω resistor and 220μF capacitor
-2. Refer to `ConnectionsGuide.png` in the project directory for all component connections.
+2. Refer to [`ConnectionsGuide.md`](ConnectionsGuide.md) in the project directory for a detailed wiring diagram with all component connections
 3. Double-check all connections before powering the system to avoid damage to sensors or microcontroller
 
 ### ESP32 Firmware Installation
