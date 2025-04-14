@@ -1,5 +1,6 @@
 # Project-specific files to ignore
 project.txt
+sensor_data.csv
 
 # Python virtual environment
 aqi/

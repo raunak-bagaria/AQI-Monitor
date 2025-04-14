@@ -7,7 +7,7 @@
 | DHT11 | Data | GPIO4 |
 | MQ-135 | VCC | VIN |
 | MQ-135 | GND | GND |
-| MQ-135 | AO | GPIO15 |
+| MQ-135 | AO | GPIO32 |
 | GP2Y1010AU0F | VCC | VIN |
 | GP2Y1010AU0F | GND (Black) | GND |
 | GP2Y1010AU0F | GND (Yellow) | GND |
