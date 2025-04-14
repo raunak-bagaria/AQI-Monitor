@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Add automatic refresh every 60 seconds -->
+    <meta http-equiv="refresh" content="60">
+    <title>Indoor Air Quality Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        .container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .card { border: 1px solid #ccc; padding: 15px; border-radius: 5px; background-color: #f9f9f9; }
+        .card h2 { margin-top: 0; font-size: 1.2em; }
+        .card p { font-size: 1.5em; margin: 5px 0; font-weight: bold; }
+        .chart-container { width: 100%; max-width: 900px; margin: auto; }
+        h1 { text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>Indoor Air Quality Dashboard</h1>
+
+    <div class="container">
+        {% set latest_data = data_history[-1] if data_history else {} %}
+        <div class="card">
+            <h2>Temperature</h2>
+            <p>{{ '%.1f'|format(latest_data.get('temperature', 'N/A')) }} °C</p>
+        </div>
+        <div class="card">
+            <h2>Humidity</h2>
+            <p>{{ '%.1f'|format(latest_data.get('humidity', 'N/A')) }} %</p>
+        </div>
+        <div class="card">
+            <h2>Air Quality (Raw)</h2>
+            <p>{{ latest_data.get('air_quality_raw', 'N/A') }}</p>
+            <small>(MQ135 Analog Reading)</small>
+        </div>
+        <div class="card">
+            <h2>Dust Level (Raw)</h2>
+            <p>{{ latest_data.get('dust_raw', 'N/A') }}</p>
+             <small>(GP2Y10 Analog Reading)</small>
+        </div>
+    </div>
+     <p style="text-align: center;">Last updated: {{ latest_data.get('timestamp', 'Never') }}</p>
+
+    <div class="chart-container">
+        <canvas id="sensorChart"></canvas>
+    </div>
+
+    <script>
+        const historyData = {{ data_history | tojson }};
+        const labels = historyData.map(d => d.timestamp);
+        const tempData = historyData.map(d => d.temperature);
+        const humidityData = historyData.map(d => d.humidity);
+        const airQualityData = historyData.map(d => d.air_quality_raw);
+        const dustData = historyData.map(d => d.dust_raw);
+
+        const ctx = document.getElementById('sensorChart').getContext('2d');
+        const sensorChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Temperature (°C)',
+                        data: tempData,
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        yAxisID: 'y',
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        data: humidityData,
+                        borderColor: 'rgb(54, 162, 235)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        yAxisID: 'y',
+                    },
+                     {
+                        label: 'Air Quality (Raw)',
+                        data: airQualityData,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        yAxisID: 'y1', // Use secondary axis
+                        hidden: true // Initially hidden
+                    },
+                    {
+                        label: 'Dust Level (Raw)',
+                        data: dustData,
+                        borderColor: 'rgb(153, 102, 255)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.5)',
+                        yAxisID: 'y1', // Use secondary axis
+                        hidden: true // Initially hidden
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                stacked: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Sensor Data History'
+                    }
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Timestamp'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Temp (°C) / Humidity (%)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                         title: {
+                            display: true,
+                            text: 'Raw Sensor Values'
+                        },
+                        // grid line settings
+                        grid: {
+                            drawOnChartArea: false, // only want the grid lines for one axis to show up
+                        },
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
