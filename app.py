@@ -3,11 +3,10 @@ from datetime import datetime
 import csv
 import os
 import json
-from aqi_calculator import calculate_overall_aqi  # Import our AQI calculator
+from aqi_calculator import calculate_overall_aqi
 
 app = Flask(__name__)
 
-# Define CSV file path and fieldnames - renamed fields and added raw_dust_value
 CSV_FILE = 'sensor_data.csv'
 FIELDNAMES = ['timestamp', 'temperature', 'humidity', 'gas_ppm', 'dust_density', 'raw_dust_value']
 
@@ -55,7 +54,7 @@ def index():
     except Exception as e:
         print(f"Error reading CSV file: {e}")
 
-    # Pass the data read from CSV (or empty list) to the template
+    # Pass the data read from CSV to the template
     return render_template('index.html', data_history=data_history)
 
 @app.route('/data', methods=['POST'])
@@ -75,13 +74,6 @@ def receive_data():
 
         # Add timestamp
         data['timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        # Map old field names to new ones if needed
-        if 'air_quality_raw' in data and 'gas_ppm' not in data:
-            data['gas_ppm'] = data.pop('air_quality_raw')
-        
-        if 'dust_raw' in data and 'dust_density' not in data:
-            data['dust_density'] = data.pop('dust_raw')
             
         # Print detailed data for debugging
         print(f"Parsed data: {json.dumps(data, indent=2)}")
